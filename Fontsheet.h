@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "Spritesheet.h"
 class Fontsheet {
 private:
@@ -7,13 +7,13 @@ private:
 public:
 	int spritesize = 8;
 	sf::Sprite* getSprite(char c);
-	Fontsheet(){}
+	Fontsheet() : font{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } {}
 
 	void startFadeIn();
 	void startFadeOut();
 
 	void setSpritesheet(Spritesheet sheet[settings::FONT_SIZE]) {
-		for (int i = 0; i < settings::FONT_SIZE; i++) {
+		for (unsigned int i = 0; i < settings::FONT_SIZE; i++) {
 			font[i] = sheet[i];
 		}
 	}

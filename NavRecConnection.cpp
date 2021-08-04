@@ -1,4 +1,3 @@
-#pragma once
 #include "NavRecConnection.h"
 #include "Pathfinder.h"
 #include "Pos2D.h"
@@ -11,7 +10,7 @@ void NavRecConnection::checkNeighbor()
 	}
 }
 
-const int NavRecConnection::OverLaps(Pos2D& a_start, Pos2D& a_size, Pos2D& b_start, Pos2D& b_size)
+int NavRecConnection::OverLaps(const Pos2D& a_start, const Pos2D& a_size, const Pos2D& b_start, const Pos2D& b_size) const
 {
 	Pos2D a_tl = a_start;
 	Pos2D a_tr = Pos2D(a_start.x + a_size.x, a_start.y);
@@ -26,7 +25,7 @@ const int NavRecConnection::OverLaps(Pos2D& a_start, Pos2D& a_size, Pos2D& b_sta
 		std::cout << a_start.x;
 		std::cout << b_start.x;
 		std::cout << std::endl;
-		return -1;		
+		return -1;
 	}
 	if (IsOnLine(a_tl, b_tr, b_br))
 		return 3;
@@ -47,7 +46,7 @@ const int NavRecConnection::OverLaps(Pos2D& a_start, Pos2D& a_size, Pos2D& b_sta
 	return -1;
 }
 
-const bool NavRecConnection::IsOnLine(Pos2D& point, Pos2D& start, Pos2D& end)
+bool NavRecConnection::IsOnLine(const Pos2D& point, const Pos2D& start, const Pos2D& end) const
 {
 
 	if (start.x == end.x) {
@@ -60,14 +59,15 @@ const bool NavRecConnection::IsOnLine(Pos2D& point, Pos2D& start, Pos2D& end)
 			if (InRange(point.x, start.x, end.x))
 				return true;
 	}
+	return false;
 }
 
-const bool NavRecConnection::InRange(float a, float b_min, float b_max)
+bool NavRecConnection::InRange(float a, float b_min, float b_max) const
 {
 	return a >= b_min && a <= b_max;
 }
 
-float NavRecConnection::GetEstimatedCost(nav_ptr& a, nav_ptr& b)
+float NavRecConnection::GetEstimatedCost(const nav_ptr& a, const nav_ptr& b) const
 {
 	Pos2D center_a = Pos2D(a->start.x + a->size.x / 2, a->start.y + a->size.y);
 	Pos2D center_b = Pos2D(b->start.x + b->size.x / 2, b->start.y + b->size.y);

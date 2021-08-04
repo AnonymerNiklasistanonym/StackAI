@@ -1,4 +1,3 @@
-#pragma once
 #include "OpenList.h"
 
 void OpenList::AddOrUpdate(AStarNode new_node)

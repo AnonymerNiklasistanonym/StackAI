@@ -1,4 +1,3 @@
-#pragma once
 #include "ASCII.h"
 #include <SFML/Graphics.hpp>
 #include "Actor.h"
@@ -63,7 +62,7 @@ void Actor::Move(World& world)
 		world.GetTile(pos_).WalkOn();
 	}
 	else {
-		path_.reset();		
+		path_.reset();
 	}
 }
 
@@ -73,7 +72,7 @@ void Actor::ResetMoveTimer() {
 
 void Actor::GetRandomTarget()
 {
-	target_.x = random::getInt(settings::WORLD_WIDTH-1);
-	target_.y = random::getInt(settings::WORLD_HEIGHT-1);	
+	target_.x = random_custom::getInt(settings::WORLD_WIDTH-1);
+	target_.y = random_custom::getInt(settings::WORLD_HEIGHT-1);
 	path_.reset();
 }

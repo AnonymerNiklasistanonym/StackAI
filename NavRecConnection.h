@@ -15,8 +15,8 @@ private:
 	void checkNeighbor();
 	//RETURNS THE DIRECTION OF A POTENTIAL OVERLAP FROM a POV
 	//-1:NONE		0:TOP	1:RIGHT		2:BELOW		3:LEFT
-	const int OverLaps(Pos2D& a_start, Pos2D& a_size, Pos2D& b_start, Pos2D& b_size);
-	const bool IsOnLine(Pos2D& point, Pos2D& start, Pos2D& end);
-	const bool InRange(float a, float b_min, float b_max);
-	float GetEstimatedCost(nav_ptr& a, nav_ptr& b);
+	int OverLaps(const Pos2D& a_start, const Pos2D& a_size, const Pos2D& b_start, const Pos2D& b_size) const;
+	bool IsOnLine(const Pos2D& point, const Pos2D& start, const Pos2D& end) const;
+	bool InRange(float a, float b_min, float b_max) const;
+	float GetEstimatedCost(const nav_ptr& a, const nav_ptr& b) const;
 };

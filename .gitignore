@@ -8,3 +8,12 @@ cpplint.py
 StackAI.vcxproj
 StackAI.vcxproj.filters
 assets/terminal24 - Kopie.png
+
+# Project CMake build directory
+build
+# CppCheck log file
+cppcheck.log
+# QtCreator or other CMake based editor config file
+CMakeLists.txt.user
+# VSCode config file
+.vscode/settings.json

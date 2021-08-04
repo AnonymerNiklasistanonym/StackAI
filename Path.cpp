@@ -1,4 +1,3 @@
-#pragma once
 #include "Path.h"
 
 void Path::ReversePath()
@@ -28,5 +27,3 @@ int Path::length()
 {
     return first->length(0);
 }
-
-

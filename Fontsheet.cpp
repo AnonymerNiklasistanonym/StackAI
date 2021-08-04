@@ -9,22 +9,22 @@ sf::Sprite* Fontsheet::getSprite(char c){
 }
 
 void Fontsheet::startFadeIn(){
-	for (int i = 0; i < settings::FONT_SIZE; i++) {
+	for (unsigned int i = 0; i < settings::FONT_SIZE; i++) {
 		font[i].m_backwards = true;
 		font[i].setSpeed(font[i].getSize()-1, 0.2f);
-		font[i].setSpeed(0, -1.0f);		
+		font[i].setSpeed(0, -1.0f);
 	}
 }
 
-void Fontsheet::startFadeOut(){	
-	for (int i = 0; i < settings::FONT_SIZE; i++) {
+void Fontsheet::startFadeOut(){
+	for (unsigned int i = 0; i < settings::FONT_SIZE; i++) {
 		font[i].m_backwards = false;
 		font[i].setSpeed(font[i].getSize()-1, -1.0f);
 		font[i].setSpeed(0, 0.2f);
 	}
 }
 
-void Fontsheet::update(int i, float delta){
+void Fontsheet::update(int i, float delta) {
 	int index = i - 'a';
 	index = index % settings::FONT_SIZE;
 	index = (index < 0) ? 0 : index;

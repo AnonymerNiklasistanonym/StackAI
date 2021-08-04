@@ -1,4 +1,3 @@
-#pragma once
 #include "Pos2D.h"
 #include <memory>
 #include "World.h"
@@ -43,8 +42,8 @@ std::shared_ptr<Path> Pathfinder::GetPath(World& world, Pos2D start, Pos2D targe
 			if(!closedlist.contains(next))
 				openlist.AddOrUpdate(next);
 		}
-		closedlist.add(current_node);	
-	}	
+		closedlist.add(current_node);
+	}
 	return nullptr;
 }
 
@@ -61,6 +60,7 @@ nav_ptr Pathfinder::GetNavRecAtPos(Pos2D position)
 			return navrec;
 		}
 	}
+	return nullptr;
 }
 
 void Pathfinder::ClearNavRecHeuristic()
@@ -88,13 +88,13 @@ std::shared_ptr<Path> Pathfinder::ReversePathFromTarget(AStarNode target)
 	return path;
 }
 
-const float Pathfinder::ManhattanDistance(Pos2D& start, Pos2D& target)
+float Pathfinder::ManhattanDistance(Pos2D& start, Pos2D& target)
 {
 	float cost = (float)std::abs(start.x - target.x) + (float)std::abs(start.y - target.y);
 	return cost;
 }
 
-const float Pathfinder::SemiEuclidDistance(Pos2D& start, Pos2D& target)
+float Pathfinder::SemiEuclidDistance(Pos2D& start, Pos2D& target)
 {
 	float cost = 0;
 	int dif_x = std::abs(start.x - target.x);
@@ -105,7 +105,7 @@ const float Pathfinder::SemiEuclidDistance(Pos2D& start, Pos2D& target)
 	return cost;
 }
 
-const float Pathfinder::DiagonalMod(Pos2D& a, Pos2D& b)
+float Pathfinder::DiagonalMod(Pos2D& a, Pos2D& b)
 {
 	if (ManhattanDistance(a, b) == 1)
 		return 1;
@@ -113,14 +113,14 @@ const float Pathfinder::DiagonalMod(Pos2D& a, Pos2D& b)
 		return sqr2;
 }
 
-const void Pathfinder::UpdateNavRec(World& world, Pos2D location) {
+void Pathfinder::UpdateNavRec(World& world, Pos2D location) {
 	navrecs.clear();
 	int width = world.kTilesWidth - location.x;
 	int height = world.kTilesHeight - location.y;
 		for (int y = location.y; y < height; y++) {
 			for (int x = location.x; x < width; x++) {
 				if (world.GetTile(x, y).walkable_) {
-					if (!IsInNavRec(Pos2D(x, y))) {						
+					if (!IsInNavRec(Pos2D(x, y))) {
 						auto navrec = FindNavRecFromPos(world, Pos2D(x,y));
 						if (navrec->IsValid()) {
 							navrecs.push_back(navrec);
@@ -145,7 +145,7 @@ const void Pathfinder::UpdateNavRec(World& world, Pos2D location) {
 
 
 
-const bool Pathfinder::IsInNavRec(Pos2D location) {
+bool Pathfinder::IsInNavRec(Pos2D location) {
 	for (auto navrec : navrecs) {
 		if (navrec->contains(location)) {
 			return true;
@@ -154,7 +154,7 @@ const bool Pathfinder::IsInNavRec(Pos2D location) {
 	return false;
 }
 
-const nav_ptr Pathfinder::FindNavRecFromPos(World& world, Pos2D location) {
+nav_ptr Pathfinder::FindNavRecFromPos(World& world, Pos2D location) {
 	int width = world.kTilesWidth;
 	int height = world.kTilesHeight;
 	for (int x = location.x; x < width; x++) {

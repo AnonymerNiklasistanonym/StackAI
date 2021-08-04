@@ -1,7 +1,8 @@
 #pragma once
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Settings.h"
+#include <cstdint>
 
 using namespace sf;
 
@@ -14,7 +15,11 @@ private:
 	IntRect GetSpriteArea(int i);
 public:
 	Spritesheet(Texture* texture);
-	Sprite& GetSprite(unsigned __int8 i);
+	Sprite& GetSprite(uint8_t i);
+	// TODO
+	bool m_backwards;
+	sf::Sprite* getCurrentSprite();
+	void setSpeed(int a, float b);
+	int getSize();
+	void update(float delta);
 };
-
-

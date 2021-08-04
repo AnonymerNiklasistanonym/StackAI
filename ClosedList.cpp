@@ -1,4 +1,3 @@
-#pragma once
 #include "ClosedList.h"
 
 bool ClosedList::contains(AStarNode new_node)

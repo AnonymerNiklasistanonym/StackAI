@@ -16,16 +16,16 @@ public:
 	bool IsReachable(World& world, Pos2D start, Pos2D target);
 	sf::RenderWindow* window_;
 	Spritesheet* font_;
-	const void UpdateNavRec(World& world, Pos2D location);
-	const bool IsInNavRec(Pos2D location);
-	const nav_ptr FindNavRecFromPos(World& world, Pos2D location);
-	static const float SemiEuclidDistance(Pos2D& start, Pos2D& target);
+	void UpdateNavRec(World& world, Pos2D location);
+	bool IsInNavRec(Pos2D location);
+	nav_ptr FindNavRecFromPos(World& world, Pos2D location);
+	static float SemiEuclidDistance(Pos2D& start, Pos2D& target);
 
 private:
 	nav_ptr GetNavRecAtPos(Pos2D target);
 	void ClearNavRecHeuristic();
 	float Heuristic(Pos2D start, Pos2D target);
 	std::shared_ptr<Path> ReversePathFromTarget(AStarNode target);
-	const float ManhattanDistance(Pos2D& start, Pos2D& target);
-	const float DiagonalMod(Pos2D& a, Pos2D& b);
+	float ManhattanDistance(Pos2D& start, Pos2D& target);
+	float DiagonalMod(Pos2D& a, Pos2D& b);
 };

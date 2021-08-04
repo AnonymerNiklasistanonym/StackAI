@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <SFML/Graphics.hpp>
-namespace random {
+namespace random_custom {
 	static bool r_init = false;
 	static void init() {
 		if (!r_init) {
@@ -15,6 +15,7 @@ namespace random {
 		init();
 		return LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
 	}
+
 	static int getInt(int HI) {
 		init();
 		if (HI == 0)

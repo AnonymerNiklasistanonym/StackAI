@@ -1,4 +1,3 @@
-#pragma once
 #include "AStarNode.h"
 
 bool operator<(const AStarNode& a, const AStarNode& b)
@@ -19,4 +18,3 @@ bool operator==(const AStarNode& a, const AStarNode& b)
 {
 	return a.pathcost == b.pathcost && a.tile.pos_.x == b.tile.pos_.x && a.tile.pos_.y == b.tile.pos_.y;
 }
-

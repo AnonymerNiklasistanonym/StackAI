@@ -1,4 +1,3 @@
-#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -18,7 +17,7 @@ sf::Clock deltaClock;
 
 Texture* loadTexture(std::string path) {
     sf::Texture* texture = new Texture;
-    if (texture->loadFromFile(path)) {        
+    if (texture->loadFromFile(path)) {
         return texture;
     }
     else {
@@ -31,8 +30,8 @@ Texture* loadTexture(std::string path) {
 int main()
 {
     Spritesheet font = Spritesheet(loadTexture("assets/terminal24.png"));
-    actors.push_back(Actor(Pos2D(55, 10))); 
-    sf::RenderWindow window(sf::VideoMode(settings::SCREEN_WIDTH, settings::SCREEN_HEIGTH), "Space");
+    actors.push_back(Actor(Pos2D(55, 10)));
+    sf::RenderWindow window(sf::VideoMode(settings::SCREEN_WIDTH, settings::SCREEN_HEIGHT), "Space");
     World world;
     world.pathfinder_.window_ = &window;
     world.pathfinder_.font_ = &font;
@@ -63,8 +62,8 @@ void update(World& world) {
 void render(sf::RenderWindow& window, World& world, Spritesheet& font)
 {
     window.clear();
-    for (int x = 0; x < settings::WORLD_WIDTH; x++) {
-        for (int y = 0; y < settings::WORLD_HEIGHT; y++) {
+    for (unsigned int x = 0; x < settings::WORLD_WIDTH; x++) {
+        for (unsigned int y = 0; y < settings::WORLD_HEIGHT; y++) {
            world.GetTile(x, y).symbol_.Draw(window,font,x,y);
         }
     }

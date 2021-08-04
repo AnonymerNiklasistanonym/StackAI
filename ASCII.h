@@ -182,7 +182,7 @@ namespace ASCII {
 
 
 	static int get_random_ground() {
-		switch (random::getInt(20)) {
+		switch (random_custom::getInt(20)) {
 		case 0:
 			return dot;
 		case 1:
@@ -192,7 +192,7 @@ namespace ASCII {
 		case 3:
 			return apostrophe;
 		case 4:
-			return bwd_apostrophe;		
+			return bwd_apostrophe;
 		}
 		return empty;
 	}

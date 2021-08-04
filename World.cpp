@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _CUSTOM_RANDOM_GET_RANDOM_GROUND
+#define _CUSTOM_RANDOM_GET_RANDOM_GROUND
+#endif
 #include "World.h"
 #include "ASCII.h"
 World::World() {
@@ -25,8 +27,8 @@ void World::InitWorld() {
 
 void World::PlaceRandomStones() {
     for (int i = 0; i < 100; i++) {
-        int x = random::getInt(settings::WORLD_WIDTH-1);
-        int y = random::getInt(settings::WORLD_HEIGHT-1);
+        int x = random_custom::getInt(settings::WORLD_WIDTH-1);
+        int y = random_custom::getInt(settings::WORLD_HEIGHT-1);
         SetPos(x, y, ASCIISymbol(ASCII::sun, sf::Color(50, 50, 50, 235)));
         GetTile(x, y).SetDefaultTileCost(5);
         GetTile(x, y).symbol_.SetBGColor(sf::Color(0, 100, 0, 255));
@@ -44,8 +46,8 @@ void World::Renaturalize(float delta) {
     if (renaturalization_time_ < 0) {
         int amount = settings::WORLD_HEIGHT * settings::WORLD_HEIGHT * kRenaturalizationPercentage;
         for (int i = 0; i < amount; i++) {
-            int x = random::getInt(settings::WORLD_WIDTH - 1);
-            int y = random::getInt(settings::WORLD_HEIGHT - 1);
+            int x = random_custom::getInt(settings::WORLD_WIDTH - 1);
+            int y = random_custom::getInt(settings::WORLD_HEIGHT - 1);
             if (IsValid(x, y)) {
                 GetTile(x, y).Renaturalize();
             }
@@ -137,7 +139,7 @@ std::vector<Tile> World::GetAdjacents(Pos2D& pos) {
         if (IsValid(left) && GetTile(left).walkable_)
             if (IsValid(downleft) && GetTile(downleft).walkable_)
                 adjacents.push_back(GetTile(downleft));
- 
+
 
     return adjacents;
 }
@@ -146,9 +148,8 @@ int World::XY(int& x, int& y) {
     if (IsValid(x, y)) {
         return x + y * kTilesWidth;
     }
-    else { 
+    else {
         std::cout << "ILLEGAL ACCESS: " <<x<<"/"<<y<<std::endl;
         return 0;
     }
 }
-
