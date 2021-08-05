@@ -9,6 +9,9 @@ set(PROJECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(INCLUDE_DIR "${PROJECT_DIR}/include")
 set(SOURCE_DIR "${PROJECT_DIR}")
 
+# Show or hide exact makefile commands
+set(CMAKE_VERBOSE_MAKEFILE on)
+
 # Find required packages
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 
@@ -16,8 +19,8 @@ find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 # > Header files
 file(
     GLOB_RECURSE PROJECT_HEADER_FILES
-    "${INCLUDE_DIR}/*.hpp"
-    "${INCLUDE_DIR}/**/*.hpp"
+    #"${INCLUDE_DIR}/*.hpp"
+    #"${INCLUDE_DIR}/**/*.hpp"
     "${SOURCE_DIR}/*.h"
     "${SOURCE_DIR}/*.hpp"
 )
@@ -158,7 +161,7 @@ add_executable(
 
 # Specify the include directories
 # > The source and include directory
-target_include_directories(${PROJECT_NAME} PRIVATE ${SOURCE_DIR} ${INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${SOURCE_DIR})
 
 # Link sfml libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics)

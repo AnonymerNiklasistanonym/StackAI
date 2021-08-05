@@ -9,7 +9,7 @@ CMAKE_BUILD_OPTIONS_EXTRA_CHECK=-DCHECK_CODE=ON \
                                 -DFORMAT_CODE=OFF
 CMAKE_PROJECT_NAME=test
 
-.PHONY: clean build
+.PHONY: build check clean
 
 all: build
 
