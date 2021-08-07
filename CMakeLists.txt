@@ -2,34 +2,42 @@
 cmake_minimum_required(VERSION 3.21)
 
 # Set project name and the programming language
-project("test" LANGUAGES CXX VERSION 0.0.1)
+project("StackAI" LANGUAGES CXX VERSION 0.0.1)
 
 # Set important paths
 set(PROJECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(INCLUDE_DIR "${PROJECT_DIR}/include")
 set(SOURCE_DIR "${PROJECT_DIR}")
+set(TEST_DIR "${PROJECT_DIR}/test")
 
 # Show or hide exact makefile commands
 set(CMAKE_VERBOSE_MAKEFILE on)
 
 # Find required packages
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
+# > Set this variable to exclude all local SFML headers
+set(VENDOR_DIR_SFML "${PROJECT_DIR}/include/SFML")
 
 # Find all source/header files
 # > Header files
 file(
     GLOB_RECURSE PROJECT_HEADER_FILES
-    #"${INCLUDE_DIR}/*.hpp"
-    #"${INCLUDE_DIR}/**/*.hpp"
+    "${INCLUDE_DIR}/*.hpp"
+    "${INCLUDE_DIR}/**/*.hpp"
     "${SOURCE_DIR}/*.h"
     "${SOURCE_DIR}/*.hpp"
 )
-# > Remove header files from the build/binary directory
+# > Remove header files from the build/binary directory and print the other ones
+message(STATUS "Project header files:")
 foreach(PROJECT_HEADER_FILE ${PROJECT_HEADER_FILES})
-    string(FIND ${PROJECT_HEADER_FILE} ${PROJECT_BINARY_DIR} EXCLUDE_DIR_FOUND)
-    if (NOT ${EXCLUDE_DIR_FOUND} EQUAL -1)
+    string(FIND ${PROJECT_HEADER_FILE} ${PROJECT_BINARY_DIR} EXCLUDE_DIR_FOUND_BIN)
+    string(FIND ${PROJECT_HEADER_FILE} ${TEST_DIR} EXCLUDE_DIR_FOUND_TEST)
+    string(FIND ${PROJECT_HEADER_FILE} ${VENDOR_DIR_SFML} EXCLUDE_DIR_FOUND_VENDOR_SFML)
+    if ((NOT ${EXCLUDE_DIR_FOUND_BIN} EQUAL -1) OR (NOT ${EXCLUDE_DIR_FOUND_TEST} EQUAL -1) OR (NOT ${EXCLUDE_DIR_FOUND_VENDOR_SFML} EQUAL -1))
         list(REMOVE_ITEM PROJECT_HEADER_FILES ${PROJECT_HEADER_FILE})
-    endif ()
+    else()
+        message(STATUS "- ${PROJECT_HEADER_FILE}")
+    endif()
 endforeach()
 # > Source files
 set(PROJECT_MAIN_SOURCE_FILE "${SOURCE_DIR}/main.cpp")
@@ -37,12 +45,17 @@ file(
     GLOB_RECURSE PROJECT_SOURCE_FILES
     "${SOURCE_DIR}/*.cpp"
 )
-# > Remove source files from the build/binary directory
+# > Remove source files from the build/binary directory and print the other ones
+message(STATUS "Project source files:")
 foreach(PROJECT_SOURCE_FILE ${PROJECT_SOURCE_FILES})
-    string(FIND ${PROJECT_SOURCE_FILE} ${PROJECT_BINARY_DIR} EXCLUDE_DIR_FOUND)
-    if (NOT ${EXCLUDE_DIR_FOUND} EQUAL -1)
+    string(FIND ${PROJECT_SOURCE_FILE} ${PROJECT_BINARY_DIR} EXCLUDE_DIR_FOUND_BIN)
+    string(FIND ${PROJECT_SOURCE_FILE} ${TEST_DIR} EXCLUDE_DIR_FOUND_TEST)
+    string(FIND ${PROJECT_SOURCE_FILE} ${VENDOR_DIR_SFML} EXCLUDE_DIR_FOUND_VENDOR_SFML)
+    if ((NOT ${EXCLUDE_DIR_FOUND_BIN} EQUAL -1) OR (NOT ${EXCLUDE_DIR_FOUND_TEST} EQUAL -1) OR (NOT ${EXCLUDE_DIR_FOUND_VENDOR_SFML} EQUAL -1))
         list(REMOVE_ITEM PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FILE})
-    endif ()
+    else()
+        message(STATUS "- ${PROJECT_SOURCE_FILE}")
+    endif()
 endforeach()
 # > Extract main source file
 get_filename_component(

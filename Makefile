@@ -7,7 +7,7 @@ CMAKE_BUILD_OPTIONS_EXTRA=-DCHECK_CODE=OFF \
                           -DFORMAT_CODE=OFF
 CMAKE_BUILD_OPTIONS_EXTRA_CHECK=-DCHECK_CODE=ON \
                                 -DFORMAT_CODE=OFF
-CMAKE_PROJECT_NAME=test
+CMAKE_PROJECT_NAME=StackAI
 
 .PHONY: build check clean
 
@@ -16,12 +16,12 @@ all: build
 build:
 	cmake -E make_directory "$(BUILD_DIR)"
 	cmake -E chdir "$(BUILD_DIR)" cmake $(CMAKE_BUILD_OPTIONS) $(CMAKE_BUILD_OPTIONS_EXTRA) ..
-	cmake -E chdir "$(BUILD_DIR)" cmake --build . -- -j 4
+	cmake -E chdir "$(BUILD_DIR)" cmake --build . -- -j 4 2>&1 | tee build.log
 
 check:
 	cmake -E make_directory "$(BUILD_DIR)"
 	cmake -E chdir "$(BUILD_DIR)" cmake $(CMAKE_BUILD_OPTIONS) $(CMAKE_BUILD_OPTIONS_EXTRA_CHECK) ..
-	cmake -E chdir "$(BUILD_DIR)" cmake --build . -- -j 4 | tee cppcheck.log
+	cmake -E chdir "$(BUILD_DIR)" cmake --build . -- -j 4 2>&1 | tee cppcheck.log
 
 clean:
 	rm -rf "$(BUILD_DIR)"

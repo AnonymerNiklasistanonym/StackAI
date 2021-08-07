@@ -55,7 +55,7 @@ jobs:
 
     - name: Build and CppCheck
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} | tee ${{github.workspace}}/cppcheck.log
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} 2>&1 | tee ${{github.workspace}}/cppcheck.log
       continue-on-error: true
 
     - name: Archive cppcheck log

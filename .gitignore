@@ -11,6 +11,8 @@ assets/terminal24 - Kopie.png
 
 # Project CMake build directory
 build
+# Build log file
+build.log
 # CppCheck log file
 cppcheck.log
 # QtCreator or other CMake based editor config file
