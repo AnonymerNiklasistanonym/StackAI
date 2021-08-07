@@ -4,28 +4,48 @@ cmake_minimum_required(VERSION 3.21)
 # Set project name and the programming language
 project("StackAI" LANGUAGES CXX VERSION 0.0.1)
 
+# Enable testing
+include(CTest)
+enable_testing()
+
 # Set important paths
 set(PROJECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(INCLUDE_DIR "${PROJECT_DIR}/include")
 set(SOURCE_DIR "${PROJECT_DIR}")
 set(TEST_DIR "${PROJECT_DIR}/test")
 
+# Set important values
+set(PROJECT_NAME_TEST "tests")
+
 # Show or hide exact makefile commands
 set(CMAKE_VERBOSE_MAKEFILE on)
 
 # Find required packages
+# > Find SFML
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 # > Set this variable to exclude all local SFML headers
 set(VENDOR_DIR_SFML "${PROJECT_DIR}/include/SFML")
+# > Find Catch2
+find_package(Catch2 2.13)
+if(${Catch2_FOUND})
+   message(STATUS "Found Catch2.")
+else()
+   message(STATUS "Could not locate Catch2.")
+endif()
 
 # Find all source/header files
 # > Header files
 file(
     GLOB_RECURSE PROJECT_HEADER_FILES
+    "${INCLUDE_DIR}/*.h"
     "${INCLUDE_DIR}/*.hpp"
-    "${INCLUDE_DIR}/**/*.hpp"
     "${SOURCE_DIR}/*.h"
     "${SOURCE_DIR}/*.hpp"
+)
+file(
+    GLOB_RECURSE TEST_HEADER_FILES
+    "${TEST_DIR}/*.h"
+    "${TEST_DIR}/*.hpp"
 )
 # > Remove header files from the build/binary directory and print the other ones
 message(STATUS "Project header files:")
@@ -44,6 +64,11 @@ set(PROJECT_MAIN_SOURCE_FILE "${SOURCE_DIR}/main.cpp")
 file(
     GLOB_RECURSE PROJECT_SOURCE_FILES
     "${SOURCE_DIR}/*.cpp"
+)
+set(TEST_MAIN_SOURCE_FILE "${TEST_DIR}/test.cpp")
+file(
+    GLOB_RECURSE TEST_SOURCE_FILES
+    "${TEST_DIR}/*.cpp"
 )
 # > Remove source files from the build/binary directory and print the other ones
 message(STATUS "Project source files:")
@@ -64,6 +89,12 @@ get_filename_component(
     ABSOLUTE
 )
 list(REMOVE_ITEM PROJECT_SOURCE_FILES "${PROJECT_MAIN_SOURCE_FILE}")
+get_filename_component(
+    TEST_MAIN_SOURCE_FILE
+    ${TEST_MAIN_SOURCE_FILE}
+    ABSOLUTE
+)
+list(REMOVE_ITEM TEST_SOURCE_FILES "${TEST_MAIN_SOURCE_FILE}")
 
 # Option: Statically check source code
 option(CHECK_CODE "Statically check source code" OFF)
@@ -88,6 +119,9 @@ if(CHECK_CODE)
             ${PROJECT_MAIN_SOURCE_FILE}
             ${PROJECT_SOURCE_FILES}
             ${PROJECT_HEADER_FILES}
+            ${TEST_MAIN_SOURCE_FILE}
+            ${TEST_SOURCE_FILES}
+            ${TEST_HEADER_FILES}
         )
         add_custom_target(
             "${PROJECT_NAME}-check-code"
@@ -142,6 +176,9 @@ if(FORMAT_CODE)
             ${PROJECT_MAIN_SOURCE_FILE}
             ${PROJECT_SOURCE_FILES}
             ${PROJECT_HEADER_FILES}
+            ${TEST_MAIN_SOURCE_FILE}
+            ${TEST_SOURCE_FILES}
+            ${TEST_HEADER_FILES}
         )
         add_custom_target(
             "${PROJECT_NAME}-format-code"
@@ -171,13 +208,42 @@ add_executable(
     ${PROJECT_SOURCE_FILES}
     ${PROJECT_HEADER_FILES}
 )
+# > Test executable
+if(${Catch2_FOUND})
+    add_executable(
+        ${PROJECT_NAME_TEST}
+        ${TEST_MAIN_SOURCE_FILE}
+        ${TEST_SOURCE_FILES}
+        ${TEST_HEADER_FILES}
+        ${PROJECT_SOURCE_FILES}
+        ${PROJECT_HEADER_FILES}
+    )
+endif()
 
 # Specify the include directories
 # > The source and include directory
 target_include_directories(${PROJECT_NAME} PRIVATE ${SOURCE_DIR})
+if(${Catch2_FOUND})
+    target_include_directories(${PROJECT_NAME_TEST} PRIVATE ${SOURCE_DIR})
+endif()
 
-# Link sfml libraries
+# Link libraries
+# > SFML
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics)
+if(${Catch2_FOUND})
+    target_link_libraries(${PROJECT_NAME_TEST} PRIVATE sfml-graphics)
+endif()
+# > Catch2
+if(${Catch2_FOUND})
+    target_link_libraries(${PROJECT_NAME_TEST} PRIVATE Catch2::Catch2)
+endif()
+
+# Enable automatic test discovery
+include(CTest)
+if(${Catch2_FOUND})
+    include(Catch)
+    catch_discover_tests(${PROJECT_NAME_TEST})
+endif()
 
 # Set library source files compilation flags for different compilers
 target_compile_options(
@@ -199,13 +265,43 @@ target_compile_options(
     /W4
     >
 )
+if(${Catch2_FOUND})
+    target_compile_options(
+        ${PROJECT_NAME_TEST}
+        PRIVATE
+        $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+        -pedantic
+        -Wall
+        -Werror
+        # Disable errors for unused functions and parameters but still show warnings
+        -Wno-error=unused-function
+        -Wno-error=unused-parameter
+        -Wextra
+        -Wformat
+        >
+        $<$<CXX_COMPILER_ID:MSVC>:
+        /Wall
+        /pedantic
+        /W4
+        >
+    )
+endif()
 
 # Set C++ version for the project
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 23)
-target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_23)
+if(${Catch2_FOUND})
+    set_property(TARGET ${PROJECT_NAME_TEST} PROPERTY CXX_STANDARD 23)
+endif()
+    target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_23)
+if(${Catch2_FOUND})
+    target_compile_features(${PROJECT_NAME_TEST} INTERFACE cxx_std_23)
+endif()
 
 # Set Debug post fix to differentiate a debug and release executable
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "d")
+if(${Catch2_FOUND})
+    set_target_properties(${PROJECT_NAME_TEST} PROPERTIES DEBUG_POSTFIX "d")
+endif()
 
 # Copy assets
 file(COPY "${PROJECT_DIR}/assets" DESTINATION "${PROJECT_BINARY_DIR}")
