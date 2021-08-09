@@ -13,13 +13,13 @@ TEST_CASE( "NavRec", "[NavRec]" ) {
             "find connection same position but size 0",
             std::make_shared<NavRec>(Pos2D { 0, 0 }, Pos2D { 0, 0 }),
             std::make_shared<NavRec>(Pos2D { 0, 0 }, Pos2D { 0, 0 }),
-            -1
+            0
         }, {
             "find connection same position",
             std::make_shared<NavRec>(Pos2D { 0, 0 }, Pos2D { 1, 1 }),
             std::make_shared<NavRec>(Pos2D { 0, 0 }, Pos2D { 1, 1 }),
             // Somehow this is also -1
-            -1
+            0
         }
     };
     for (const auto& [name, from, to, expectedOutput] : valuesToTest)
