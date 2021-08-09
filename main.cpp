@@ -30,7 +30,7 @@ Texture* loadTexture(std::string path) {
 int main()
 {
     Spritesheet font = Spritesheet(loadTexture("assets/terminal24.png"));
-    actors.push_back(Actor(Pos2D(55, 10)));
+    actors.push_back(Actor(Pos2D(13, 7)));
     sf::RenderWindow window(sf::VideoMode(settings::SCREEN_WIDTH, settings::SCREEN_HEIGHT), "Space");
     World world;
     world.pathfinder_.window_ = &window;
@@ -115,9 +115,11 @@ void check_input(sf::RenderWindow& window, World& world)
     }
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         world.SetWall(mousepos, true);
+        world.pathfinder_.UpdateNavRec(world, Pos2D(0, 0));
     }
     if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
         world.SetWall(mousepos, false);
+        world.pathfinder_.UpdateNavRec(world, Pos2D(0, 0));
     }
     if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);

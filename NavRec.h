@@ -13,9 +13,12 @@ struct NavRec {
 	float current_heuristic = -1;
 	bool IsValid() { return size.x > 0 && size.y > 0; }
 	bool contains(Pos2D pos);
-	void AddConnection(NavRecConnection& neighbor);
-	void RemoveConnection(NavRecConnection& neighbor);
+	void AddConnection(std::shared_ptr<NavRecConnection> neighbor);
 	void DepthSearchConnections(float connectioncost);
-	std::vector<NavRecConnection> neighbors;
+	Pos2D GetCornerTopLeft();
+	Pos2D GetCornerTopRight();
+	Pos2D GetCornerBottomLeft();
+	Pos2D GetCornerBottomRight();
+	std::vector<std::shared_ptr<NavRecConnection>> neighbors;
 private:
 };

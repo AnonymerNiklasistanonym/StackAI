@@ -17,8 +17,11 @@ public:
 	sf::RenderWindow* window_;
 	Spritesheet* font_;
 	void UpdateNavRec(World& world, Pos2D location);
+	void UpdateNavRecConnections(World& world);
+	void FindNavRecsOnLine(nav_ptr navrec, Pos2D start, Pos2D target);
+	void AddNavConnectionAtPos(const Pos2D& start, nav_ptr& navrec);
 	bool IsInNavRec(Pos2D location);
-	nav_ptr FindNavRecFromPos(World& world, Pos2D location);
+	const nav_ptr CreateNavRecFromPos(World& world, Pos2D location);
 	static float SemiEuclidDistance(Pos2D& start, Pos2D& target);
 
 private:
